@@ -1,0 +1,94 @@
+# MAC0218 - Técnicas de Programação II
+# MiniEP 6 - Docker
+# Nome: Marília Takaguti Dicezare
+# NUSP: 6818375
+
+# Parte 1 - Criando sua própria imagem
+
+# cria uma imagem
+docker image build . -t custom-caddy:2.5.0-alpine
+
+# lista imagens
+docker images
+
+# coloca a imagem em execução
+docker container run \
+--name my-caddy-server \
+-p 8080:80 \
+-d custom-caddy:2.5.0-alpine
+
+# lista containers
+docker ps
+
+# verifica que as atualizações não são feita antes de reconstruir a imagem
+# curl localhost:8080
+# acrescentando uma linha em index.html
+# curl localhost:8080
+# a nova linha não aparece
+
+# para o container em execução e o remove
+docker container stop my-caddy-server
+docker container rm my-caddy-server
+
+# constrói a imagem novamente
+docker image build . -t custom-caddy:2.5.0-alpine
+
+# executa a imagem novamente
+docker container run \
+--name my-caddy-server \
+-p 8080:80 \
+-d custom-caddy:2.5.0-alpine
+
+# lista containers e imagens
+docker ps
+docker images
+
+# verifica as atualizações nas páginas
+# curl localhost:8080
+# a nova linha aparece
+
+
+# Parte 2 - Potencializando nosso Servidor para desenvolvimento
+
+# para o container em execução e o remove
+docker container stop my-caddy-server
+docker container rm my-caddy-server 
+
+# lista containers
+docker ps
+
+# remove todas as imagens e as lista
+docker image rmi $(docker images -a -q)
+docker images
+
+# constrói uma imagem e lista imagens
+docker image build . -t custom-caddy:2.5.0-alpine
+docker images
+
+# coloca a imagem em execução com uma linha adicional que utiliza volumes do Docker para vincular diretórios (o atual com o que está dentro do container)
+docker container run \
+--name my-caddy-server \
+-v $(pwd):/usr/src/pages \
+-p 8080:80 \
+-d custom-caddy:2.5.0-alpine
+
+# lista containers
+docker ps
+
+# verifica que as atualizações aparecem sem ter que reconstruir a imagem e sem ter que interromper a execução do container
+# curl localhost:8080
+# removendo linha adicionada em index.html
+# curl localhost:8080
+# a nova linha desaparece
+
+# para o container em execução e o remove
+docker container stop my-caddy-server
+docker container rm my-caddy-server 
+
+# remove todas as imagens
+docker image rmi $(docker images -a -q)
+
+# lista containers e imagens
+docker ps
+docker images
+
