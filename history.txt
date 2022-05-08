@@ -20,7 +20,7 @@ docker container run \
 # lista containers
 docker ps
 
-# verifica que as atualizações não são feita antes de reconstruir a imagem
+# verifica que as atualizações não são feitas antes de reconstruir a imagem
 # curl localhost:8080
 # acrescentando uma linha em index.html
 # curl localhost:8080
@@ -57,7 +57,7 @@ docker container rm my-caddy-server
 # lista containers
 docker ps
 
-# remove todas as imagens e as lista
+# remove todas as imagens e lista imagens
 docker image rmi $(docker images -a -q)
 docker images
 
